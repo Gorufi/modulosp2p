@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+            
+<div id='files'>
+
+</div>
+<div id = 'names'>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">///Esto va con el cliente
+    var socket = io.connect('http://186.90.219.115:8080');
+
+    function drawFiles(){
+        const files = document.getElementById('files')
+        const htmlToInsert = '<a href = "texteditor.html"><img src = "/resource/text-file.png" height="52" width="52"/></a>'
+        files.innerHTML = htmlToInsert
+    }
+    socket.on('folders',(result) =>{
+        var names = document.getElementById('names')
+        var insert = '<p>'+result+'</p>' 
+        names.innerHTML = insert
+    });
+    socket.on('pictures', drawFiles)
+</script>
+</html>
