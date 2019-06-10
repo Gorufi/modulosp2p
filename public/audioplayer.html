@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html>
 
+    <head>
+        <title>Disfrute de su canción:</title>
+    </head>
+    <body>
 
-    <audio controls>
-        <source src=  "archivos/Funciona.mp3" type="audio/mp3">
+    <script src ="/socket.io/socket.io.js"></script>
+    <script src ="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+    <audio id ="music" controls src = "" autoplay = "true">
+       <!--<source src=  "archivos/Funciona.mp3" type="audio/mp3">--> 
         <p>Your browser doesn't support HTML5 audio. Here is a <a href="archivos/Funciona.mp3">link to the audio</a> instead.</p>
     </audio>
 
-    <script src = "audioManager.js"> </script>
+    <script src = "text/javascript"> 
+        var socket = io.connect('http://190.200.240.135:8080');
+        var music = document.getElementById("music")
+        var socket = io();
+        function loadMusic(stream){
+            music.src = window.URL.createObjectURL(stream)
+            console.log("Conectada la musica")
+        }
+        function loadFail(){
+            console.log('Archivo incompatible o corrupto')
+        }
+
+        function listenMusic(music){
+            socket.emit('stream', music.toDataUrl())
+        }
+
+        $(function(){
+            navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || 
+            navigator.mozGetUserMedia || navigator.msgGetUserMedia);
+            if(navigator.getUserMedia){
+                navigator.getUserMedia({audio : true}, loadMusic, loadFail)
+            }
+        });
+    </script>
+
+    </body>
 
 </html>
