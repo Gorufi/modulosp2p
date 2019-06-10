@@ -9,18 +9,56 @@
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">///Esto va con el cliente
-    var socket = io.connect('http://186.90.219.115:8080');
+    var socket = io.connect('http://localhost:8080');
 
-    function drawFiles(){
-        const files = document.getElementById('files')
-        const htmlToInsert = '<a href = "texteditor.html"><img src = "/resource/text-file.png" height="52" width="52"/></a>'
-        files.innerHTML = htmlToInsert
+
+    function pasartxt(i){
+        //var direccion = './archivos/'+documento
+        //socket.emit('ruta', direccion)
+        //console.log(direccion)
+        return function(e){
+            console.log(i)
+        }
+        
     }
-    socket.on('folders',(result) =>{
+
+    //socket.on('folders',(result) =>{
+      //  var names = document.getElementById('names')
+        //var insert = '<p>'+result+'</p>' 
+       // names.innerHTML = insert
+    //});
+    socket.on('folders', (result, extens)=>{
         var names = document.getElementById('names')
         var insert = '<p>'+result+'</p>' 
         names.innerHTML = insert
+        ///////
+        const files = document.getElementById('files')
+        var htmlToInsert = ''
+        for(var i = 0; i < extens.length ;i++){
+            switch(extens[i]){
+                case 'txt':
+
+                    htmlToInsert += '<div onclick={pasartxt('+i+')}><a href = "texteditor.html"><img src = "/resource/text-file.png" height="52" width="52"/></a></div>'
+                    
+                break;
+
+                case 'mp3':
+                    htmlToInsert += '<a href = #><img src = "/resource/musical-note.png" height="52" width="52"/></a>'
+
+                break;
+
+                case 'xls':
+                    htmlToInsert += '<a href = #><img src = "/resource/table-grid.png" height="52" width="52"/></a>'
+
+                break;
+
+                default:
+                    htmlToInsert += '<img src = "/resource/cancel.png" alt = "Archivo no soportado" height="52" width="52"/>'
+
+                break;
+            }
+        };
+        files.innerHTML = htmlToInsert
     });
-    socket.on('pictures', drawFiles)
 </script>
 </html>
