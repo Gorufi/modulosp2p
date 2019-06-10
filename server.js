@@ -8,10 +8,11 @@ const fs = require('fs');
 var io = socket(server);
 app.use(express.static(__dirname + '/public'));
 
-const dirsize = 46 //En LABAM, este valor es 55
+const dirsize = 53 //En LABAM, este valor es 53
 
 var text = {text: ''}
-var flag = true
+var txtFinal = ''
+var extens = []
 
 var _getAllFilesFromFolder = function(dir) {
 
@@ -38,6 +39,9 @@ var _getAllFilesFromFolder = function(dir) {
         arch += '<br><br>'
     }
 
+    extens = getTypes(arch)
+    console.log(extens)
+    asignartxt(results, extens)
     return arch;
 };
 
@@ -49,18 +53,25 @@ function getTypes(archives){
             i +=8
         }  
     };
+    exten = exten.filter(function(el){
+        return el != null
+    });
     return exten
+}
+
+function asignartxt(array, exten){
+    var newA = []
+    newA = array
+    for(var i = 0; i < exten.length; i++){
+        if(exten[i] == 'txt'){
+            txtFinal = newA[i]
+        }
+
+    };
 }
 
 var result = _getAllFilesFromFolder(__dirname + "/archivos")
 console.log(result);
-
-var extens = []
-extens = getTypes(result)
-extens = extens.filter(function(el){
-    return el != null
-});
-console.log(extens)
 
 io.sockets.on('connection', socket=>{
     console.log('a new user with id ' + socket.id + " has entered");
@@ -72,7 +83,7 @@ io.sockets.on('connection', socket=>{
     socket.on('text', data => {
         text.text = data.text
         io.sockets.emit('text', data);
-        fs.writeFile('./archivos/takeMeWithU.txt', text.text, 'utf8', (err)=>{
+        fs.writeFile(txtFinal, text.text, 'utf8', (err)=>{
             if(err) throw err;
             console.log('Archivo modificado por:'+ socket.id)
         })
