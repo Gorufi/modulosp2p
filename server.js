@@ -1,14 +1,16 @@
 var express = require('express')
 var express = require('express');
 var socket = require('socket.io');
+var http = require('http');
 var app = express();
-var server = app.listen(process.env.PORT || 8080);
 const fs = require('fs'); 
+
+var server = app.listen(process.env.PORT || 8080);
 
 var io = socket(server);
 app.use(express.static(__dirname + '/public'));
 
-const dirsize = 53 //En LABAM, este valor es 53
+const dirsize = 60 //En LABAM, este valor es 53
 
 var text = {text: ''}
 var txtFinal = ''
@@ -70,7 +72,7 @@ function asignartxt(array, exten){
     };
 }
 
-var result = _getAllFilesFromFolder(__dirname + "/archivos")
+var result = _getAllFilesFromFolder(__dirname + "/public/archivos")
 console.log(result);
 
 io.sockets.on('connection', socket=>{
@@ -88,5 +90,10 @@ io.sockets.on('connection', socket=>{
             console.log('Archivo modificado por:'+ socket.id)
         })
     });
+});
+
+http.on('request', function(request, response){
+    var inputStream = fs.open('./public/archivos/Funciona.mp3')
+    inputStream.pipe(response)
 });
 
