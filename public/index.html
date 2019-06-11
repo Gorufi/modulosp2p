@@ -9,7 +9,7 @@
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">///Esto va con el cliente
-    var socket = io.connect('http://190.200.240.135:8080');
+    var socket = io.connect('http://localhost:8080');
 
 
     function pasartxt(i){
@@ -27,10 +27,11 @@
         //var insert = '<p>'+result+'</p>' 
        // names.innerHTML = insert
     //});
-    socket.on('folders', (result, extens)=>{
+    socket.on('folders', (result, extens, results)=>{
         var names = document.getElementById('names')
         var insert = '<p>'+result+'</p>' 
         names.innerHTML = insert
+        var musica  = new String
         ///////
         const files = document.getElementById('files')
         var htmlToInsert = ''
@@ -43,7 +44,12 @@
                 break;
 
                 case 'mp3':
-                    htmlToInsert += '<a href = #><img src = "/resource/musical-note.png" height="52" width="52"/></a>'
+                    musica = ''
+                    for(var k = 62; k < results[i].length; k++){
+                        musica += results[i][k]
+                    }
+                
+                    htmlToInsert += '<a href = /public/archivos/'+musica+'><img src = "/resource/musical-note.png" height="52" width="52"/></a>'
 
                 break;
 

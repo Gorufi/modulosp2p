@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html>
 
+    <head>
+        <title>Disfrute de su canción</title>
+    </head>
+    <body>
 
-    <audio controls>
-        <source src=  "archivos/Funciona.mp3" type="audio/mp3">
+    <script src ="/socket.io/socket.io.js"></script>
+    <script src ="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+    <audio id ="music" controls src = "" autoplay = "true">
+       <!--<source src=  "archivos/Funciona.mp3" type="audio/mp3">--> 
         <p>Your browser doesn't support HTML5 audio. Here is a <a href="archivos/Funciona.mp3">link to the audio</a> instead.</p>
     </audio>
 
-    <script src = "audioManager.js"> </script>
+    <script src = "text/javascript"> 
+        var socket = io.connect('http://localhost:8080');
+        var stream = ss.createStream()
+        ss(socket).emit('file', stream)
+        stream.pipe(fs.createWriteStream('/archivos/Funciona.mp3'))
+    </script>
+
+    </body>
 
 </html>

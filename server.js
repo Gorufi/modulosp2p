@@ -1,24 +1,24 @@
 var express = require('express')
-var express = require('express');
-var socket = require('socket.io');
-var http = require('http');
+var socket = require('socket.io')
+var ss = require('socket.io-stream')
 var app = express();
 const fs = require('fs'); 
+var mediaserver = require('mediaserver')
+var path = require('path')
 
 var server = app.listen(process.env.PORT || 8080);
 
 var io = socket(server);
 app.use(express.static(__dirname + '/public'));
 
-const dirsize = 60 //En LABAM, este valor es 53
+const dirsize = 62 //En LABAM, este valor es 53
 
 var text = {text: ''}
 var txtFinal = ''
 var extens = []
+var results = []
 
 var _getAllFilesFromFolder = function(dir) {
-
-    var results = [];
 
     fs.readdirSync(dir).forEach(function(file) {
 
@@ -77,7 +77,7 @@ console.log(result);
 
 io.sockets.on('connection', socket=>{
     console.log('a new user with id ' + socket.id + " has entered");
-    socket.emit('folders', result, extens);
+    socket.emit('folders', result, extens, results);
     //socket.emit('pictures', extens)
 
     //Editor de texto
@@ -92,8 +92,7 @@ io.sockets.on('connection', socket=>{
     });
 });
 
-http.on('request', function(request, response){
-    var inputStream = fs.open('./public/archivos/Funciona.mp3')
-    inputStream.pipe(response)
+app.get('/public/archivos/:nombre', (req, res)=>{
+    var cancion = path.join(__dirname, '/public/archivos/', req.params.nombre)
+    mediaserver.pipe(req, res,cancion)
 });
-

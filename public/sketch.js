@@ -5,7 +5,7 @@ var text = {
 var flag = true;
 //Aqui funciona el socket
 function setup(){
-    socket = io.connect('http://190.200.240.135:8080');
+    socket = io.connect('http://localhost:8080');
     $("#text").on("froalaEditor.keyup", function(){
         var html = $(this).froalaEditor('html.get');
         var data = {
