@@ -15,7 +15,7 @@
     "log": "^6.0.0",
     "mediaserver": "^0.1.1",
     "requirejs": "^2.3.6",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "socket.io-stream": "^0.9.1"
   }
 }
